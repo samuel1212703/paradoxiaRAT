@@ -34,16 +34,16 @@ void WSAReportError(void)
 }
 
 
-void split(char* src, char* dest[5], const char* delimeter) {
+void split(char* src, char* dest[5], const char* delimiter) {
     // Only split if delimeter does exist in the source string
-    if (strstr(src, delimeter) != NULL)
-    {
+    if (strstr(src, delimiter) != NULL) {
         int i = 0;
-        char* p = strtok(src, delimeter);
-        while (p != NULL)
-        {
+        char* context = NULL; // State variable for strtok_s
+        char* p = strtok_s(src, delimiter, &context); // First call to strtok_s
+
+        while (p != NULL && i < 5) {
             dest[i++] = p;
-            p = strtok(NULL, delimeter);
+            p = strtok_s(NULL, delimiter, &context); // Subsequent calls
         }
     }
 }

